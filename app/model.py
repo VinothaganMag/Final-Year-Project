@@ -1,20 +1,36 @@
 import re
+from urllib.parse import urlparse
+
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
-from urllib.parse import urlparse
-
 
 # ═══════════════════════════════════════════════
 # SUSPICIOUS KEYWORDS
 # ═══════════════════════════════════════════════
 
 SUSPICIOUS_KEYWORDS = [
-    'login', 'verify', 'bank', 'free', 'secure', 'update',
-    'confirm', 'account', 'password', 'signin', 'submit',
-    'suspend', 'restrict', 'urgent', 'click', 'winner',
-    'prize', 'offer', 'limited', 'expire'
+    "login",
+    "verify",
+    "bank",
+    "free",
+    "secure",
+    "update",
+    "confirm",
+    "account",
+    "password",
+    "signin",
+    "submit",
+    "suspend",
+    "restrict",
+    "urgent",
+    "click",
+    "winner",
+    "prize",
+    "offer",
+    "limited",
+    "expire",
 ]
 
 
@@ -23,82 +39,103 @@ SUSPICIOUS_KEYWORDS = [
 # ═══════════════════════════════════════════════
 
 FEATURE_NAMES = [
-    'URL Length', 'Number of Dots', 'Number of Digits',
-    'Special Characters', 'HTTPS Present', 'Contains IP Address',
-    'Suspicious Keywords', 'Subdomains', 'Has @ Symbol',
-    'Hyphens Count', 'Path Length', 'Has Redirect', 'URL Parameters'
+    "URL Length",
+    "Number of Dots",
+    "Number of Digits",
+    "Special Characters",
+    "HTTPS Present",
+    "Contains IP Address",
+    "Suspicious Keywords",
+    "Subdomains",
+    "Has @ Symbol",
+    "Hyphens Count",
+    "Path Length",
+    "Has Redirect",
+    "URL Parameters",
 ]
 
 
 def extract_url_features(url: str) -> dict:
     url_lower = url.lower().strip()
-    if not url_lower.startswith(('http://', 'https://')):
-        parse_url = 'http://' + url_lower
+    if not url_lower.startswith(("http://", "https://")):
+        parse_url = "http://" + url_lower
     else:
         parse_url = url_lower
 
     parsed = urlparse(parse_url)
 
     url_length = len(url_lower)
-    num_dots = url_lower.count('.')
+    num_dots = url_lower.count(".")
     num_digits = sum(c.isdigit() for c in url_lower)
-    num_special = sum(not c.isalnum() and c not in './:' for c in url_lower)
-    has_https = 1 if url_lower.startswith('https://') else 0
+    num_special = sum(not c.isalnum() and c not in "./:" for c in url_lower)
+    has_https = 1 if url_lower.startswith("https://") else 0
 
     ip_pattern = re.compile(
-        r'(?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?)'
+        r"(?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?)"
     )
     has_ip = 1 if ip_pattern.search(url_lower) else 0
 
     found_keywords = [kw for kw in SUSPICIOUS_KEYWORDS if kw in url_lower]
     num_suspicious = len(found_keywords)
-    num_subdomains = len(parsed.hostname.split('.')) - 1 if parsed.hostname else 0
-    has_at = 1 if '@' in url_lower else 0
-    num_hyphens = url_lower.count('-')
+    num_subdomains = len(parsed.hostname.split(".")) - 1 if parsed.hostname else 0
+    has_at = 1 if "@" in url_lower else 0
+    num_hyphens = url_lower.count("-")
     path_length = len(parsed.path)
-    has_redirect = 1 if '//' in parsed.path else 0
-    num_params = len(parsed.query.split('&')) if parsed.query else 0
+    has_redirect = 1 if "//" in parsed.path else 0
+    num_params = len(parsed.query.split("&")) if parsed.query else 0
 
     return {
-        'url_length': url_length,
-        'num_dots': num_dots,
-        'num_digits': num_digits,
-        'num_special_chars': num_special,
-        'has_https': has_https,
-        'has_ip_address': has_ip,
-        'num_suspicious_keywords': num_suspicious,
-        'found_keywords': found_keywords,
-        'num_subdomains': num_subdomains,
-        'has_at_symbol': has_at,
-        'num_hyphens': num_hyphens,
-        'path_length': path_length,
-        'has_redirect': has_redirect,
-        'num_params': num_params,
+        "url_length": url_length,
+        "num_dots": num_dots,
+        "num_digits": num_digits,
+        "num_special_chars": num_special,
+        "has_https": has_https,
+        "has_ip_address": has_ip,
+        "num_suspicious_keywords": num_suspicious,
+        "found_keywords": found_keywords,
+        "num_subdomains": num_subdomains,
+        "has_at_symbol": has_at,
+        "num_hyphens": num_hyphens,
+        "path_length": path_length,
+        "has_redirect": has_redirect,
+        "num_params": num_params,
     }
 
 
 def url_features_to_array(features: dict) -> np.ndarray:
-    return np.array([[
-        features['url_length'], features['num_dots'], features['num_digits'],
-        features['num_special_chars'], features['has_https'], features['has_ip_address'],
-        features['num_suspicious_keywords'], features['num_subdomains'],
-        features['has_at_symbol'], features['num_hyphens'], features['path_length'],
-        features['has_redirect'], features['num_params'],
-    ]])
+    return np.array(
+        [
+            [
+                features["url_length"],
+                features["num_dots"],
+                features["num_digits"],
+                features["num_special_chars"],
+                features["has_https"],
+                features["has_ip_address"],
+                features["num_suspicious_keywords"],
+                features["num_subdomains"],
+                features["has_at_symbol"],
+                features["num_hyphens"],
+                features["path_length"],
+                features["has_redirect"],
+                features["num_params"],
+            ]
+        ]
+    )
 
 
 def calculate_risk_score(features: dict) -> tuple:
     score = 0
     reasons = []
 
-    if features['url_length'] > 75:
+    if features["url_length"] > 75:
         score += 20
         reasons.append(f"URL is unusually long ({features['url_length']} chars)")
-    elif features['url_length'] > 50:
+    elif features["url_length"] > 50:
         score += 10
         reasons.append(f"URL is moderately long ({features['url_length']} chars)")
 
-    kw = features['found_keywords']
+    kw = features["found_keywords"]
     if len(kw) >= 3:
         score += 30
         reasons.append(f"Multiple suspicious keywords: {', '.join(kw)}")
@@ -106,38 +143,38 @@ def calculate_risk_score(features: dict) -> tuple:
         score += 15 + len(kw) * 5
         reasons.append(f"Suspicious keyword(s): {', '.join(kw)}")
 
-    if features['has_https'] == 0:
+    if features["has_https"] == 0:
         score += 20
         reasons.append("No HTTPS — insecure connection")
 
-    if features['num_dots'] > 4:
+    if features["num_dots"] > 4:
         score += 10
         reasons.append(f"Excessive dots ({features['num_dots']}), possible subdomain abuse")
-    elif features['num_dots'] > 3:
+    elif features["num_dots"] > 3:
         score += 5
         reasons.append(f"Above-average dots ({features['num_dots']})")
 
-    if features['has_ip_address']:
+    if features["has_ip_address"]:
         score += 15
         reasons.append("URL contains IP address instead of domain")
 
-    if features['num_special_chars'] > 5:
+    if features["num_special_chars"] > 5:
         score += 10
         reasons.append(f"High special character count ({features['num_special_chars']})")
 
-    if features['has_at_symbol']:
+    if features["has_at_symbol"]:
         score += 10
         reasons.append("Contains @ symbol — possible obfuscation")
 
-    if features['has_redirect']:
+    if features["has_redirect"]:
         score += 10
         reasons.append("Has redirect pattern (//) in path")
 
-    if features['num_digits'] > 6:
+    if features["num_digits"] > 6:
         score += 5
         reasons.append(f"Many digits in URL ({features['num_digits']})")
 
-    if features['num_params'] > 3:
+    if features["num_params"] > 3:
         score += 5
         reasons.append(f"Many query parameters ({features['num_params']})")
 
@@ -150,51 +187,56 @@ def calculate_risk_score(features: dict) -> tuple:
 
 def classify_risk(score: int) -> str:
     if score <= 30:
-        return 'Safe'
+        return "Safe"
     elif score <= 60:
-        return 'Suspicious'
-    return 'Dangerous'
+        return "Suspicious"
+    return "Dangerous"
 
 
 # ═══════════════════════════════════════════════
 # BUILD URL MODEL (RandomForest)
 # ═══════════════════════════════════════════════
 
+
 def build_url_model():
     np.random.seed(42)
     n = 600
 
-    safe = np.column_stack([
-        np.random.randint(10, 40, n),
-        np.random.randint(1, 3, n),
-        np.random.randint(0, 3, n),
-        np.random.randint(0, 2, n),
-        np.ones(n),
-        np.zeros(n),
-        np.zeros(n),
-        np.random.randint(1, 3, n),
-        np.zeros(n),
-        np.random.randint(0, 2, n),
-        np.random.randint(1, 15, n),
-        np.zeros(n),
-        np.random.randint(0, 2, n),
-    ])
+    safe = np.column_stack(
+        [
+            np.random.randint(10, 40, n),
+            np.random.randint(1, 3, n),
+            np.random.randint(0, 3, n),
+            np.random.randint(0, 2, n),
+            np.ones(n),
+            np.zeros(n),
+            np.zeros(n),
+            np.random.randint(1, 3, n),
+            np.zeros(n),
+            np.random.randint(0, 2, n),
+            np.random.randint(1, 15, n),
+            np.zeros(n),
+            np.random.randint(0, 2, n),
+        ]
+    )
 
-    phish = np.column_stack([
-        np.random.randint(50, 120, n),
-        np.random.randint(3, 8, n),
-        np.random.randint(3, 15, n),
-        np.random.randint(3, 10, n),
-        np.random.choice([0, 1], n, p=[0.7, 0.3]),
-        np.random.choice([0, 1], n, p=[0.6, 0.4]),
-        np.random.randint(1, 5, n),
-        np.random.randint(3, 7, n),
-        np.random.choice([0, 1], n, p=[0.7, 0.3]),
-        np.random.randint(2, 6, n),
-        np.random.randint(15, 60, n),
-        np.random.choice([0, 1], n, p=[0.5, 0.5]),
-        np.random.randint(2, 8, n),
-    ])
+    phish = np.column_stack(
+        [
+            np.random.randint(50, 120, n),
+            np.random.randint(3, 8, n),
+            np.random.randint(3, 15, n),
+            np.random.randint(3, 10, n),
+            np.random.choice([0, 1], n, p=[0.7, 0.3]),
+            np.random.choice([0, 1], n, p=[0.6, 0.4]),
+            np.random.randint(1, 5, n),
+            np.random.randint(3, 7, n),
+            np.random.choice([0, 1], n, p=[0.7, 0.3]),
+            np.random.randint(2, 6, n),
+            np.random.randint(15, 60, n),
+            np.random.choice([0, 1], n, p=[0.5, 0.5]),
+            np.random.randint(2, 8, n),
+        ]
+    )
 
     X = np.vstack([safe, phish])
     y = np.array([0] * n + [1] * n)
@@ -279,7 +321,7 @@ def build_mail_model():
     texts = SPAM_SAMPLES + HAM_SAMPLES
     labels = [1] * len(SPAM_SAMPLES) + [0] * len(HAM_SAMPLES)
 
-    vectorizer = TfidfVectorizer(max_features=3000, stop_words='english', ngram_range=(1, 2))
+    vectorizer = TfidfVectorizer(max_features=3000, stop_words="english", ngram_range=(1, 2))
     X = vectorizer.fit_transform(texts)
 
     model = LogisticRegression(max_iter=1000, C=1.0, random_state=42)
@@ -305,6 +347,7 @@ print("[OK] Mail model ready")
 # PREDICTION FUNCTIONS
 # ═══════════════════════════════════════════════
 
+
 def predict_url(url: str) -> dict:
     features = extract_url_features(url)
     X = url_features_to_array(features)
@@ -321,28 +364,39 @@ def predict_url(url: str) -> dict:
     importances = url_model.feature_importances_
 
     feature_keys = [
-        'url_length', 'num_dots', 'num_digits', 'num_special_chars',
-        'has_https', 'has_ip_address', 'num_suspicious_keywords',
-        'num_subdomains', 'has_at_symbol', 'num_hyphens',
-        'path_length', 'has_redirect', 'num_params',
+        "url_length",
+        "num_dots",
+        "num_digits",
+        "num_special_chars",
+        "has_https",
+        "has_ip_address",
+        "num_suspicious_keywords",
+        "num_subdomains",
+        "has_at_symbol",
+        "num_hyphens",
+        "path_length",
+        "has_redirect",
+        "num_params",
     ]
 
     breakdown = []
     for i, key in enumerate(feature_keys):
-        breakdown.append({
-            'name': FEATURE_NAMES[i],
-            'value': int(features[key]),
-            'importance': round(importances[i] * 100, 1),
-        })
+        breakdown.append(
+            {
+                "name": FEATURE_NAMES[i],
+                "value": int(features[key]),
+                "importance": round(importances[i] * 100, 1),
+            }
+        )
 
     return {
-        'risk_score': blended,
-        'status': status,
-        'reasons': reasons,
-        'features': breakdown,
-        'ml_prediction': 'Phishing' if ml_pred == 1 else 'Legitimate',
-        'ml_confidence': round(max(ml_proba) * 100, 1),
-        'phishing_probability': round(phishing_conf, 1),
+        "risk_score": blended,
+        "status": status,
+        "reasons": reasons,
+        "features": breakdown,
+        "ml_prediction": "Phishing" if ml_pred == 1 else "Legitimate",
+        "ml_confidence": round(max(ml_proba) * 100, 1),
+        "phishing_probability": round(phishing_conf, 1),
     }
 
 
@@ -351,18 +405,41 @@ def predict_mail(message: str) -> dict:
     pred = mail_model.predict(X)[0]
     proba = mail_model.predict_proba(X)[0]
 
-    label = 'Spam / Phishing' if pred == 1 else 'Legitimate'
+    label = "Spam / Phishing" if pred == 1 else "Legitimate"
     confidence = round(max(proba) * 100, 1)
     spam_prob = round(proba[1] * 100, 1)
 
     # Find suspicious words in the message
-    words = re.findall(r'\b\w+\b', message.lower())
+    words = re.findall(r"\b\w+\b", message.lower())
     alert_words = [
-        'free', 'winner', 'click', 'urgent', 'verify', 'account', 'password',
-        'claim', 'prize', 'offer', 'limited', 'expire', 'suspend', 'bank',
-        'login', 'confirm', 'immediately', 'update', 'secure', 'selected',
-        'congratulations', 'guaranteed', 'warning', 'unauthorized', 'locked',
-        'compromised', 'wire', 'transfer'
+        "free",
+        "winner",
+        "click",
+        "urgent",
+        "verify",
+        "account",
+        "password",
+        "claim",
+        "prize",
+        "offer",
+        "limited",
+        "expire",
+        "suspend",
+        "bank",
+        "login",
+        "confirm",
+        "immediately",
+        "update",
+        "secure",
+        "selected",
+        "congratulations",
+        "guaranteed",
+        "warning",
+        "unauthorized",
+        "locked",
+        "compromised",
+        "wire",
+        "transfer",
     ]
     found_alert = list(set(w for w in words if w in alert_words))
 
@@ -375,16 +452,16 @@ def predict_mail(message: str) -> dict:
             reasons.append("Very high spam probability detected")
     else:
         reasons.append("Message appears to be normal communication")
-    if '!' in message and message.count('!') > 2:
+    if "!" in message and message.count("!") > 2:
         reasons.append("Excessive use of exclamation marks")
-    if any(w in message.lower() for w in ['click here', 'act now', 'limited time']):
+    if any(w in message.lower() for w in ["click here", "act now", "limited time"]):
         reasons.append("Contains urgency cues commonly used in phishing")
 
     return {
-        'prediction': label,
-        'confidence': confidence,
-        'spam_probability': spam_prob,
-        'suspicious_words': found_alert,
-        'reasons': reasons,
-        'is_spam': bool(pred == 1),
+        "prediction": label,
+        "confidence": confidence,
+        "spam_probability": spam_prob,
+        "suspicious_words": found_alert,
+        "reasons": reasons,
+        "is_spam": bool(pred == 1),
     }
