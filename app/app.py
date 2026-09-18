@@ -13,7 +13,7 @@ app.secret_key = "cyberrisk_intel_2026_secret"
 # ACTIVITY VAULT (in-memory, session-based)
 # ═══════════════════════════════════════════════
 
-ACTIVITY_LOG = []
+ACTIVITY_LOG: list = []
 MAX_HISTORY = 50
 
 
