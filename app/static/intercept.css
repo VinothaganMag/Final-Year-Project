@@ -1,0 +1,60 @@
+/* ════════════════════════════════════════════════
+   INTERCEPTION INTERSTITIAL
+   ════════════════════════════════════════════════ */
+
+.intercept-banner {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    border-radius: 14px;
+    border: 1px solid var(--border, #e5e7eb);
+    background: var(--card, #fff);
+    margin-bottom: 18px;
+}
+
+.intercept-banner .material-icons-round {
+    font-size: 30px;
+}
+
+.intercept-banner strong {
+    display: block;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.intercept-banner p {
+    margin: 2px 0 0;
+    font-size: .875rem;
+    opacity: .75;
+}
+
+.intercept-banner.ib-safe {
+    border-left: 4px solid #16a34a;
+}
+
+.intercept-banner.ib-safe .material-icons-round {
+    color: #16a34a;
+}
+
+.intercept-banner.ib-warn {
+    border-left: 4px solid #eab308;
+}
+
+.intercept-banner.ib-warn .material-icons-round {
+    color: #eab308;
+}
+
+.intercept-banner.ib-danger {
+    border-left: 4px solid #dc2626;
+}
+
+.intercept-banner.ib-danger .material-icons-round {
+    color: #dc2626;
+}
+
+.intercept-note {
+    margin: 0 0 14px;
+    font-size: .9rem;
+    opacity: .8;
+}
