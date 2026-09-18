@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Activity Vault{% endblock %}
+{% block content %}
+<div class="page-container">
+    <div class="page-header anim-up">
+        <h1><span class="material-icons-round">history</span> Activity Vault</h1>
+        <p>Complete log of all scan activity</p>
+    </div>
+
+    {% if activities %}
+    <div class="card anim-up d1">
+        <div class="table-header-row">
+            <span class="table-count">{{ activities|length }} record(s)</span>
+        </div>
+        <div class="history-table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Type</th>
+                        <th>Input</th>
+                        <th>Status</th>
+                        <th>Score/Prob</th>
+                        <th>Timestamp</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in activities %}
+                    <tr>
+                        <td>{{ a.id }}</td>
+                        <td><span class="type-badge type-{{ a.type|lower }}">{{ a.type }}</span></td>
+                        <td class="input-cell">{{ a.input }}</td>
+                        <td>
+                            <span class="status-pill
+                                {% if a.status == 'Safe' or a.status == 'Legitimate' %}sp-safe
+                                {% elif a.status == 'Suspicious' %}sp-warn
+                                {% else %}sp-danger{% endif %}">
+                                {{ a.status }}
+                            </span>
+                        </td>
+                        <td>{{ a.score }}</td>
+                        <td class="time-cell">{{ a.timestamp }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+    <div class="card anim-up d1">
+        <div class="empty-state">
+            <span class="material-icons-round">inbox</span>
+            <p>No activity recorded yet. Start scanning to build your activity log.</p>
+            <div class="es-actions">
+                <a href="/url" class="action-btn ab-primary"><span class="material-icons-round">travel_explore</span> Scan URL</a>
+                <a href="/mail" class="action-btn ab-secondary"><span class="material-icons-round">mail_lock</span> Scan Email</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

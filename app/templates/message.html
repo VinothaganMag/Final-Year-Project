@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Message Analyzer — Web3 Phishing Detector</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">🛡️</div>
+      <span>PhishGuard</span>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-label">Main</div>
+      <a href="/"          class="nav-link"><span class="icon">🏠</span> Dashboard</a>
+      <a href="/url"       class="nav-link"><span class="icon">🔗</span> URL Scanner</a>
+      <a href="/message"   class="nav-link"><span class="icon">💬</span> Message Analyzer</a>
+      <div class="nav-label">Insights</div>
+      <a href="/analytics" class="nav-link"><span class="icon">📊</span> Analytics</a>
+      <a href="/history"   class="nav-link"><span class="icon">🕓</span> History</a>
+      <div class="nav-label">Info</div>
+      <a href="/about"     class="nav-link"><span class="icon">ℹ️</span> About</a>
+    </nav>
+    <div class="sidebar-footer">Web3 Phishing Detector<br/><span style="opacity:0.5">v2.0 · 2025</span></div>
+  </aside>
+
+  <main class="main">
+    <div class="page-header">
+      <h1>💬 Message Analyzer</h1>
+      <p>Paste any suspicious message, email, or SMS to detect phishing attempts</p>
+    </div>
+
+    <div class="card" style="margin-bottom:20px">
+      <div class="section-title">Paste Message Content</div>
+      <textarea id="msgInput" rows="7"
+        placeholder="Paste the full message here…&#10;&#10;Example: Dear customer, your account has been suspended. Click here to verify: http://secure-bank-verify.ru/login"></textarea>
+      <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
+        <button class="btn btn-primary" id="msgBtn">🔍 Analyze Message</button>
+        <button class="btn btn-ghost"
+          onclick="document.getElementById('msgInput').value='';document.getElementById('msgResult').innerHTML=''">
+          Clear
+        </button>
+        <button class="btn btn-ghost" style="font-size:0.78rem;padding:7px 14px;margin-left:auto"
+          onclick="document.getElementById('msgInput').value='Congratulations! You have won a $1000 Amazon gift card. Click here to claim: http://amazon-giftcard.tk/claim?user=winner'">
+          Try Example
+        </button>
+      </div>
+    </div>
+
+    <div id="msgResult"></div>
+
+    <!-- TIPS -->
+    <div class="grid-2" style="margin-top:20px">
+      <div class="card">
+        <div class="section-title" style="font-size:0.85rem">🚩 Phishing Message Patterns</div>
+        <ul style="list-style:none;font-size:0.83rem;color:var(--muted);line-height:2">
+          <li>⛔ Urgency ("Act now", "Limited time")</li>
+          <li>⛔ Requests for credentials or personal info</li>
+          <li>⛔ Generic greetings ("Dear customer")</li>
+          <li>⛔ Suspicious links or attachments</li>
+          <li>⛔ Prize / lottery announcements</li>
+          <li>⛔ Threats about account suspension</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="section-title" style="font-size:0.85rem">✅ What To Do</div>
+        <ul style="list-style:none;font-size:0.83rem;color:var(--muted);line-height:2">
+          <li>✔ Don't click links in suspicious messages</li>
+          <li>✔ Verify sender identity independently</li>
+          <li>✔ Contact the company via official channels</li>
+          <li>✔ Report phishing to your email provider</li>
+          <li>✔ Enable two-factor authentication</li>
+          <li>✔ Keep software and browsers updated</li>
+        </ul>
+      </div>
+    </div>
+
+    <section class="threat-details">
+      <h2>Threat Analysis</h2>
+      <p id="threat-reason">No analysis available</p>
+      <ul id="threat-features">
+        <li>No features detected</li>
+      </ul>
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

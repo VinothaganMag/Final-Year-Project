@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analytics — Web3 Phishing Detector</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">🛡️</div>
+      <span>PhishGuard</span>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-label">Main</div>
+      <a href="/"          class="nav-link"><span class="icon">🏠</span> Dashboard</a>
+      <a href="/url"       class="nav-link"><span class="icon">🔗</span> URL Scanner</a>
+      <a href="/message"   class="nav-link"><span class="icon">💬</span> Message Analyzer</a>
+      <div class="nav-label">Insights</div>
+      <a href="/analytics" class="nav-link"><span class="icon">📊</span> Analytics</a>
+      <a href="/history"   class="nav-link"><span class="icon">🕓</span> History</a>
+      <div class="nav-label">Info</div>
+      <a href="/about"     class="nav-link"><span class="icon">ℹ️</span> About</a>
+    </nav>
+    <div class="sidebar-footer">Web3 Phishing Detector<br/><span style="opacity:0.5">v2.0 · 2025</span></div>
+  </aside>
+
+  <main class="main">
+    <div class="page-header">
+      <h1>📊 Analytics</h1>
+      <p>Visual breakdown of your phishing detection statistics</p>
+    </div>
+
+    <!-- STAT CARDS -->
+    <div class="stats-grid" style="margin-bottom:24px">
+      <div class="stat-card">
+        <div class="stat-icon blue">🔍</div>
+        <div class="stat-info">
+          <div class="label">Total Scans</div>
+          <div class="value" id="analyticsTotal">0</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon red">🚨</div>
+        <div class="stat-info">
+          <div class="label">Phishing Detected</div>
+          <div class="value" id="analyticsPhishing">0</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon green">✅</div>
+        <div class="stat-info">
+          <div class="label">Safe Scans</div>
+          <div class="value" id="analyticsSafe">0</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon yellow">📈</div>
+        <div class="stat-info">
+          <div class="label">Phishing Rate</div>
+          <div class="value" id="phishingRate">0%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 1: PIE + BAR -->
+    <div class="grid-2" style="margin-bottom:20px">
+      <div class="card">
+        <div class="section-title">Safe vs Phishing Distribution</div>
+        <div class="chart-container">
+          <canvas id="pieChart"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-title">Scan Breakdown by Category</div>
+        <div class="chart-container">
+          <canvas id="barChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 2: LINE CHART -->
+    <div class="card" style="margin-bottom:20px">
+      <div class="section-title">Scan Activity — Last 7 Days</div>
+      <div class="chart-container" style="height:200px">
+        <canvas id="lineChart"></canvas>
+      </div>
+    </div>
+
+    <div class="card" style="background:rgba(59,130,246,0.04);border-color:rgba(59,130,246,0.15)">
+      <div class="section-title" style="font-size:0.85rem">ℹ️ Note</div>
+      <p style="color:var(--muted);font-size:0.83rem;line-height:1.7">
+        Analytics data is stored locally in your browser using localStorage.
+        It persists across sessions on this device but resets if you clear browser data.
+      </p>
+    </div>
+  </main>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

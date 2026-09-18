@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Phish Detector - Dashboard</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">AI Phish Detector</div>
+            <nav class="menu">
+                <a href="dashboard.html" class="menu-item active">Dashboard</a>
+                <a href="url.html" class="menu-item">URL Scanner</a>
+                <a href="message.html" class="menu-item">Message Analyzer</a>
+                <a href="analytics.html" class="menu-item">Analytics</a>
+                <a href="history.html" class="menu-item">History</a>
+                <a href="about.html" class="menu-item">About</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <h1>Dashboard</h1>
+            </header>
+
+            <section class="stats">
+                <div class="stat-card">
+                    <h2>Total Scans</h2>
+                    <p id="total-scans">0</p>
+                </div>
+                <div class="stat-card">
+                    <h2>Phishing Detected</h2>
+                    <p id="phishing-detected">0</p>
+                </div>
+                <div class="stat-card">
+                    <h2>Safe URLs</h2>
+                    <p id="safe-urls">0</p>
+                </div>
+                <div class="stat-card">
+                    <h2>Accuracy</h2>
+                    <p id="accuracy">0%</p>
+                </div>
+            </section>
+
+            <section class="recent-activity">
+                <h2>Recent Activity</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Input</th>
+                            <th>Type</th>
+                            <th>Result</th>
+                            <th>Confidence</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recent-activity-table">
+                        <!-- Dynamic rows will be added here -->
+                    </tbody>
+                </table>
+            </section>
+
+            <section class="quick-action">
+                <h2>Quick Scan</h2>
+                <input type="text" id="quick-scan-input" placeholder="Enter URL or Message">
+                <button id="quick-scan-button">Scan</button>
+            </section>
+        </main>
+    </div>
+
+    <script src="../static/script.js"></script>
+</body>
+</html>

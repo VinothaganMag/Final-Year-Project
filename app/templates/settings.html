@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Settings{% endblock %}
+{% block content %}
+<div class="page-container">
+    <div class="page-header anim-up">
+        <h1><span class="material-icons-round">tune</span> System Config</h1>
+        <p>Customize your experience and manage data</p>
+    </div>
+
+    <div class="settings-grid anim-up d1">
+        <!-- Theme -->
+        <div class="card settings-card">
+            <div class="settings-row">
+                <div class="setting-info">
+                    <span class="material-icons-round setting-icon si-blue-icon">palette</span>
+                    <div>
+                        <h3>Appearance</h3>
+                        <p>Switch between light and dark mode</p>
+                    </div>
+                </div>
+                <div class="toggle-wrap">
+                    <span class="toggle-label" id="themeLabel">Light</span>
+                    <button class="toggle-switch" id="settingsThemeToggle" aria-label="Toggle dark mode">
+                        <span class="toggle-knob"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Clear History -->
+        <div class="card settings-card">
+            <div class="settings-row">
+                <div class="setting-info">
+                    <span class="material-icons-round setting-icon si-red-icon">delete_sweep</span>
+                    <div>
+                        <h3>Clear Activity</h3>
+                        <p>Remove all scan history and activity log</p>
+                    </div>
+                </div>
+                <button class="action-btn ab-danger" id="clearHistoryBtn">
+                    <span class="material-icons-round">delete</span> Clear All
+                </button>
+            </div>
+        </div>
+
+        <!-- Info -->
+        <div class="card settings-card">
+            <div class="settings-row">
+                <div class="setting-info">
+                    <span class="material-icons-round setting-icon si-purple-icon">info</span>
+                    <div>
+                        <h3>System Info</h3>
+                        <p>Version 2.0 — Cyber Risk Intelligence System</p>
+                    </div>
+                </div>
+                <span class="version-badge">v2.0.0</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Mail Result{% endblock %}
+{% block content %}
+<div class="page-container">
+    <!-- Message preview -->
+    <div class="url-strip anim-up">
+        <span class="material-icons-round">mail</span>
+        <span class="url-mono">{{ message[:100] }}{% if message|length > 100 %}...{% endif %}</span>
+    </div>
+
+    <!-- Result card -->
+    <div class="mail-result-hero anim-up d1">
+        <div class="mail-verdict {% if data.is_spam %}verdict-spam{% else %}verdict-safe{% endif %}">
+            <span class="material-icons-round verdict-icon">
+                {% if data.is_spam %}gpp_bad{% else %}verified_user{% endif %}
+            </span>
+            <h2>{{ data.prediction }}</h2>
+            <div class="verdict-stats">
+                <span>Confidence: <strong>{{ data.confidence }}%</strong></span>
+                <span>Spam Prob: <strong>{{ data.spam_probability }}%</strong></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confidence bar -->
+    <div class="card anim-up d1">
+        <h2 class="card-head"><span class="material-icons-round">speed</span> Spam Confidence</h2>
+        <div class="conf-bar-track">
+            <div class="conf-bar-fill {% if data.is_spam %}cbf-danger{% else %}cbf-safe{% endif %}"
+                 style="width: 0%;" data-width="{{ data.spam_probability }}"></div>
+        </div>
+        <div class="conf-labels">
+            <span>Legitimate</span>
+            <span>{{ data.spam_probability }}%</span>
+            <span>Spam</span>
+        </div>
+    </div>
+
+    <!-- Suspicious words -->
+    {% if data.suspicious_words %}
+    <div class="card anim-up d2">
+        <h2 class="card-head"><span class="material-icons-round">highlight</span> Flagged Words</h2>
+        <div class="word-pills">
+            {% for word in data.suspicious_words %}
+            <span class="word-pill">{{ word }}</span>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Reasons -->
+    <div class="card anim-up d2">
+        <h2 class="card-head"><span class="material-icons-round">info</span> Analysis Findings</h2>
+        <ul class="reason-list">
+            {% for reason in data.reasons %}
+            <li class="reason-row">
+                <span class="material-icons-round reason-dot {% if data.is_spam %}dot-danger{% else %}dot-safe{% endif %}">
+                    {% if data.is_spam %}close{% else %}check{% endif %}
+                </span>
+                <span>{{ reason }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions-row anim-up d3">
+        <button class="action-btn ab-primary" onclick="generateReport('mail')">
+            <span class="material-icons-round">picture_as_pdf</span> Download Report
+        </button>
+        <a href="/mail" class="action-btn ab-secondary">
+            <span class="material-icons-round">replay</span> Scan Another
+        </a>
+    </div>
+</div>
+
+<script id="resultData" type="application/json">{{ data | tojson }}</script>
+<script id="resultMessage" type="text/plain">{{ message }}</script>
+{% endblock %}

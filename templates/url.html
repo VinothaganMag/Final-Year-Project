@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Phish Detector - URL Scanner</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">AI Phish Detector</div>
+            <nav class="menu">
+                <a href="dashboard.html" class="menu-item">Dashboard</a>
+                <a href="url.html" class="menu-item active">URL Scanner</a>
+                <a href="message.html" class="menu-item">Message Analyzer</a>
+                <a href="analytics.html" class="menu-item">Analytics</a>
+                <a href="history.html" class="menu-item">History</a>
+                <a href="about.html" class="menu-item">About</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <h1>URL Scanner</h1>
+            </header>
+
+            <section class="url-scanner">
+                <h2>Enter URL</h2>
+                <input type="text" id="url-input" placeholder="Enter URL here">
+                <select id="voting-type">
+                    <option value="soft">Soft Voting</option>
+                    <option value="hard">Hard Voting</option>
+                </select>
+                <button id="scan-url-button">Scan URL</button>
+
+                <div id="url-result" class="result-card hidden">
+                    <h2>Result</h2>
+                    <p id="url-status">Status: <span></span></p>
+                    <p id="url-confidence">Confidence: <span></span></p>
+                </div>
+
+                <div id="url-analysis" class="analysis-panel hidden">
+                    <h2>URL Analysis</h2>
+                    <p>Length: <span id="url-length"></span></p>
+                    <p>Contains Numbers: <span id="url-numbers"></span></p>
+                    <p>Suspicious Words: <span id="url-words"></span></p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="../static/script.js"></script>
+</body>
+</html>

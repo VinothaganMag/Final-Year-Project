@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="URL Risk Analysis Results — See the phishing risk score and detailed explanation.">
+    <title>Analysis Result — Risk Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="/" class="nav-brand">
+            <span class="material-icons-round brand-icon">shield</span>
+            <span>Risk Analyzer</span>
+        </a>
+        <div class="nav-links">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/about" class="nav-link">About</a>
+        </div>
+    </nav>
+
+    <main class="result-container">
+        <!-- URL Display -->
+        <div class="url-banner animate-fade-in">
+            <span class="material-icons-round">link</span>
+            <span class="url-text" title="{{ url }}">{{ url }}</span>
+        </div>
+
+        <!-- Risk Score Gauge -->
+        <div class="gauge-section animate-fade-in-delay-1">
+            <div class="gauge-wrapper">
+                <svg class="gauge-svg" viewBox="0 0 200 200">
+                    <circle class="gauge-bg" cx="100" cy="100" r="85" />
+                    <circle class="gauge-fill
+                        {% if data.status == 'Safe' %} gauge-safe
+                        {% elif data.status == 'Suspicious' %} gauge-suspicious
+                        {% else %} gauge-dangerous
+                        {% endif %}"
+                        cx="100" cy="100" r="85"
+                        stroke-dasharray="534"
+                        stroke-dashoffset="{{ 534 - (534 * data.risk_score / 100) }}"
+                        data-target="{{ 534 - (534 * data.risk_score / 100) }}"
+                    />
+                </svg>
+                <div class="gauge-center">
+                    <span class="gauge-score" id="gaugeScore" data-target="{{ data.risk_score }}">0</span>
+                    <span class="gauge-label">Risk Score</span>
+                </div>
+            </div>
+            <div class="status-badge
+                {% if data.status == 'Safe' %} status-safe
+                {% elif data.status == 'Suspicious' %} status-suspicious
+                {% else %} status-dangerous
+                {% endif %}">
+                <span class="material-icons-round">
+                    {% if data.status == 'Safe' %}check_circle
+                    {% elif data.status == 'Suspicious' %}warning
+                    {% else %}dangerous
+                    {% endif %}
+                </span>
+                <span>{{ data.status }}</span>
+            </div>
+        </div>
+
+        <!-- ML Confidence -->
+        <div class="ml-card animate-fade-in-delay-2">
+            <div class="ml-row">
+                <div class="ml-item">
+                    <span class="ml-label">ML Prediction</span>
+                    <span class="ml-value">{{ data.ml_prediction }}</span>
+                </div>
+                <div class="ml-item">
+                    <span class="ml-label">Confidence</span>
+                    <span class="ml-value">{{ data.ml_confidence }}%</span>
+                </div>
+                <div class="ml-item">
+                    <span class="ml-label">Phishing Prob.</span>
+                    <span class="ml-value">{{ data.phishing_probability }}%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Explanation Card -->
+        <div class="card explanation-card animate-fade-in-delay-2">
+            <h2 class="card-title">
+                <span class="material-icons-round">info</span>
+                Why This Score?
+            </h2>
+            <ul class="reason-list">
+                {% for reason in data.reasons %}
+                <li class="reason-item">
+                    <span class="material-icons-round reason-icon
+                        {% if data.status == 'Safe' %} icon-safe
+                        {% elif data.status == 'Suspicious' %} icon-suspicious
+                        {% else %} icon-dangerous
+                        {% endif %}">
+                        {% if data.status == 'Safe' %}check
+                        {% elif data.status == 'Suspicious' %}priority_high
+                        {% else %}close
+                        {% endif %}
+                    </span>
+                    <span>{{ reason }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-row animate-fade-in-delay-3">
+            <a href="/analysis?url={{ url }}" class="action-btn action-primary">
+                <span class="material-icons-round">analytics</span>
+                <span>View Full Analysis</span>
+            </a>
+            <a href="/" class="action-btn action-secondary">
+                <span class="material-icons-round">replay</span>
+                <span>Scan Another URL</span>
+            </a>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

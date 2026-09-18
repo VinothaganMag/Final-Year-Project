@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Phishing Website Risk Analyzer — Analyze any URL for phishing threats using machine learning.">
+    <title>Phishing Risk Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="/" class="nav-brand">
+            <span class="material-icons-round brand-icon">shield</span>
+            <span>Risk Analyzer</span>
+        </a>
+        <div class="nav-links">
+            <a href="/" class="nav-link active">Home</a>
+            <a href="/about" class="nav-link">About</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <main class="hero-container">
+        <div class="hero-badge animate-fade-in">
+            <span class="material-icons-round">verified_user</span>
+            <span>ML-Powered URL Analysis</span>
+        </div>
+
+        <h1 class="hero-title animate-fade-in-delay-1">
+            Phishing Website<br>
+            <span class="text-gradient">Risk Analyzer</span>
+        </h1>
+
+        <p class="hero-subtitle animate-fade-in-delay-2">
+            Enter any URL below to instantly analyze it for phishing threats. Our machine learning model
+            evaluates structural patterns and assigns a risk score from 0 to 100.
+        </p>
+
+        <form class="scan-form animate-fade-in-delay-3" action="/result" method="GET" id="scanForm">
+            <div class="input-wrapper">
+                <span class="material-icons-round input-icon">link</span>
+                <input
+                    type="text"
+                    name="url"
+                    id="urlInput"
+                    class="scan-input"
+                    placeholder="e.g. https://example.com/login"
+                    autocomplete="off"
+                    required
+                >
+                <button type="submit" class="scan-btn" id="scanBtn">
+                    <span class="btn-text">Analyze</span>
+                    <span class="material-icons-round btn-icon">arrow_forward</span>
+                </button>
+            </div>
+            {% if error %}
+            <p class="input-error">{{ error }}</p>
+            {% endif %}
+        </form>
+
+        <div class="trust-indicators animate-fade-in-delay-3">
+            <div class="trust-item">
+                <span class="material-icons-round">speed</span>
+                <span>Instant Analysis</span>
+            </div>
+            <div class="trust-item">
+                <span class="material-icons-round">psychology</span>
+                <span>ML-Powered</span>
+            </div>
+            <div class="trust-item">
+                <span class="material-icons-round">visibility</span>
+                <span>Explainable Results</span>
+            </div>
+        </div>
+
+        <!-- Floating decorative elements -->
+        <div class="deco-circle deco-1"></div>
+        <div class="deco-circle deco-2"></div>
+        <div class="deco-circle deco-3"></div>
+    </main>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

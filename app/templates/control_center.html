@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}Control Center{% endblock %}
+{% block content %}
+<div class="page-container">
+    <!-- HERO -->
+    <section class="cc-hero anim-up">
+        <div class="cc-hero-content">
+            <span class="cc-badge"><span class="material-icons-round">verified_user</span> Cyber Risk Intelligence</span>
+            <h1 class="cc-title">Control <span class="gradient-text">Center</span></h1>
+            <p class="cc-desc">
+                Multi-vector threat detection platform. Analyze URLs, scan emails,
+                generate reports, and track security activity — all in one place.
+            </p>
+        </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="stats-grid anim-up d1">
+        <div class="stat-card">
+            <div class="stat-icon si-blue"><span class="material-icons-round">radar</span></div>
+            <div class="stat-info">
+                <span class="stat-num">{{ stats.total_scans }}</span>
+                <span class="stat-label">Total Scans</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon si-purple"><span class="material-icons-round">travel_explore</span></div>
+            <div class="stat-info">
+                <span class="stat-num">{{ stats.url_scans }}</span>
+                <span class="stat-label">URL Scans</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon si-orange"><span class="material-icons-round">mail_lock</span></div>
+            <div class="stat-info">
+                <span class="stat-num">{{ stats.mail_scans }}</span>
+                <span class="stat-label">Mail Scans</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon si-red"><span class="material-icons-round">gpp_bad</span></div>
+            <div class="stat-info">
+                <span class="stat-num">{{ stats.threats_found }}</span>
+                <span class="stat-label">Threats Found</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- QUICK ACTIONS -->
+    <section class="qa-section anim-up d2">
+        <h2 class="section-title"><span class="material-icons-round">bolt</span> Quick Actions</h2>
+        <div class="qa-grid">
+            <a href="/url" class="qa-card qa-blue">
+                <span class="material-icons-round qa-icon">travel_explore</span>
+                <h3>URL Inspector</h3>
+                <p>Analyze any URL for phishing risk with ML-powered detection</p>
+            </a>
+            <a href="/mail" class="qa-card qa-orange">
+                <span class="material-icons-round qa-icon">mail_lock</span>
+                <h3>Mail Analyzer</h3>
+                <p>Scan emails and messages for spam and phishing patterns</p>
+            </a>
+            <a href="/insights" class="qa-card qa-purple">
+                <span class="material-icons-round qa-icon">insights</span>
+                <h3>Threat Insights</h3>
+                <p>View keyword frequency, risk distribution, and trends</p>
+            </a>
+            <a href="/reports" class="qa-card qa-green">
+                <span class="material-icons-round qa-icon">description</span>
+                <h3>PDF Reports</h3>
+                <p>Generate and download detailed analysis reports</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- RECENT ACTIVITY -->
+    {% if stats.recent %}
+    <section class="recent-section anim-up d3">
+        <h2 class="section-title"><span class="material-icons-round">schedule</span> Recent Activity</h2>
+        <div class="recent-table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Input</th>
+                        <th>Status</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in stats.recent %}
+                    <tr>
+                        <td><span class="type-badge type-{{ item.type|lower }}">{{ item.type }}</span></td>
+                        <td class="input-cell">{{ item.input }}</td>
+                        <td>
+                            <span class="status-pill
+                                {% if item.status == 'Safe' or item.status == 'Legitimate' %}sp-safe
+                                {% elif item.status == 'Suspicious' %}sp-warn
+                                {% else %}sp-danger{% endif %}">
+                                {{ item.status }}
+                            </span>
+                        </td>
+                        <td class="time-cell">{{ item.timestamp }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Scan Center{% endblock %}
+
+{% block content %}
+<header class="page-header">
+  <h1>Scan Center</h1>
+  <p>Analyze URLs and messages for phishing threats using AI</p>
+</header>
+
+<!-- ── TAB SWITCHER ── -->
+<div class="tab-bar">
+  <button class="tab active" data-tab="url" id="tabUrl">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+    URL Scan
+  </button>
+  <button class="tab" data-tab="message" id="tabMsg">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+    Message Scan
+  </button>
+</div>
+
+<!-- ── URL SCAN TAB ── -->
+<div class="tab-content active" id="panel-url">
+  <div class="card">
+    <h2 class="card-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+      URL Scanner
+    </h2>
+    <p class="card-desc">Enter a URL to check if it's a phishing attempt. Our ensemble ML model analyzes structural features and content patterns.</p>
+    <div class="input-group" style="margin-top:18px;">
+      <input type="url" id="urlInput" placeholder="https://suspicious-site.example.com/login" autocomplete="off">
+      <button class="btn btn-primary" id="scanBtn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Scan URL
+      </button>
+    </div>
+  </div>
+  <div id="resultArea" style="margin-top:20px;"></div>
+  <div id="featurePanel" style="margin-top:20px;"></div>
+</div>
+
+<!-- ── MESSAGE SCAN TAB ── -->
+<div class="tab-content" id="panel-message">
+  <div class="card">
+    <h2 class="card-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      Message Analyzer
+    </h2>
+    <p class="card-desc">Paste a suspicious email or SMS message. Our AI will detect phishing language patterns and highlight suspicious words.</p>
+    <textarea id="msgInput" placeholder="Paste a suspicious email or SMS message here..." style="margin-top:18px;"></textarea>
+    <button class="btn btn-primary" id="msgBtn" style="margin-top:14px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      Analyze Message
+    </button>
+  </div>
+  <div id="msgResult" style="margin-top:20px;"></div>
+</div>
+{% endblock %}

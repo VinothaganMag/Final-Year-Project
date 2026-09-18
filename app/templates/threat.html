@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Threat Intelligence{% endblock %}
+
+{% block content %}
+<header class="page-header">
+  <h1>Threat Intelligence</h1>
+  <p>Deep-dive into URL structural features to understand why a URL is flagged</p>
+</header>
+
+<div class="card">
+  <h2 class="card-title">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    URL Feature Inspector
+  </h2>
+  <p class="card-desc">Enter a URL to break down its structural features. Red indicators highlight potential phishing signals.</p>
+  <div class="input-group" style="margin-top:18px;">
+    <input type="url" id="threatInput" placeholder="https://example.com/suspicious-path" autocomplete="off">
+    <button class="btn btn-primary" id="threatBtn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+      Inspect
+    </button>
+  </div>
+</div>
+
+<!-- ── PREDICTION RESULT ── -->
+<div id="threatPrediction" style="margin-top:20px;"></div>
+
+<!-- ── FEATURE BREAKDOWN ── -->
+<div id="threatFeatures" style="margin-top:20px;"></div>
+
+<!-- ── RISK SUMMARY ── -->
+<div id="threatSummary" style="margin-top:20px;"></div>
+{% endblock %}

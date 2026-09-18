@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Cyber Risk Intelligence System — Advanced phishing detection and threat analysis platform.">
+    <title>{% block title %}CRIS{% endblock %} — Cyber Risk Intelligence</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+</head>
+<body>
+    <!-- TOP NAV -->
+    <nav class="topnav" id="topnav">
+        <div class="nav-left">
+            <a href="/" class="brand">
+                <span class="material-icons-round brand-shield">security</span>
+                <span class="brand-text">CRIS</span>
+            </a>
+        </div>
+        <div class="nav-center">
+            <a href="/" class="nav-item {% if request.path == '/' %}active{% endif %}" data-tooltip="Control Center">
+                <span class="material-icons-round">dashboard</span>
+                <span class="nav-label">Control Center</span>
+            </a>
+            <a href="/url" class="nav-item {% if '/url' in request.path %}active{% endif %}" data-tooltip="URL Inspector">
+                <span class="material-icons-round">travel_explore</span>
+                <span class="nav-label">URL Inspector</span>
+            </a>
+            <a href="/mail" class="nav-item {% if '/mail' in request.path %}active{% endif %}" data-tooltip="Mail Analyzer">
+                <span class="material-icons-round">mail_lock</span>
+                <span class="nav-label">Mail Analyzer</span>
+            </a>
+            <a href="/insights" class="nav-item {% if request.path == '/insights' %}active{% endif %}" data-tooltip="Threat Insights">
+                <span class="material-icons-round">insights</span>
+                <span class="nav-label">Insights</span>
+            </a>
+            <a href="/reports" class="nav-item {% if request.path == '/reports' %}active{% endif %}" data-tooltip="Reports">
+                <span class="material-icons-round">description</span>
+                <span class="nav-label">Reports</span>
+            </a>
+            <a href="/history" class="nav-item {% if request.path == '/history' %}active{% endif %}" data-tooltip="Activity Vault">
+                <span class="material-icons-round">history</span>
+                <span class="nav-label">History</span>
+            </a>
+        </div>
+        <div class="nav-right">
+            <a href="/settings" class="nav-icon-btn {% if request.path == '/settings' %}active{% endif %}" title="Settings">
+                <span class="material-icons-round">tune</span>
+            </a>
+            <a href="/about" class="nav-icon-btn {% if request.path == '/about' %}active{% endif %}" title="About">
+                <span class="material-icons-round">info</span>
+            </a>
+            <button class="nav-icon-btn theme-btn" id="themeToggle" title="Toggle Theme">
+                <span class="material-icons-round" id="themeIcon">dark_mode</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- MOBILE NAV -->
+    <nav class="mobile-nav" id="mobileNav">
+        <a href="/" class="mob-item {% if request.path == '/' %}active{% endif %}">
+            <span class="material-icons-round">dashboard</span>
+            <span>Home</span>
+        </a>
+        <a href="/url" class="mob-item {% if '/url' in request.path %}active{% endif %}">
+            <span class="material-icons-round">travel_explore</span>
+            <span>URL</span>
+        </a>
+        <a href="/mail" class="mob-item {% if '/mail' in request.path %}active{% endif %}">
+            <span class="material-icons-round">mail_lock</span>
+            <span>Mail</span>
+        </a>
+        <a href="/insights" class="mob-item {% if request.path == '/insights' %}active{% endif %}">
+            <span class="material-icons-round">insights</span>
+            <span>Insights</span>
+        </a>
+        <a href="/history" class="mob-item {% if request.path == '/history' %}active{% endif %}">
+            <span class="material-icons-round">history</span>
+            <span>History</span>
+        </a>
+    </nav>
+
+    <!-- LOADING OVERLAY -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loader-ring">
+            <div></div><div></div><div></div><div></div>
+        </div>
+        <span class="loading-text">Analyzing...</span>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

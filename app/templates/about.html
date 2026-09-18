@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}About{% endblock %}
+{% block content %}
+<div class="page-container">
+    <div class="about-hero anim-up">
+        <span class="material-icons-round about-shield">security</span>
+        <h1>Cyber Risk Intelligence System</h1>
+        <p class="about-lead">
+            A multi-vector threat detection platform that combines machine learning
+            with heuristic analysis to identify phishing URLs, spam emails, and emerging cyber threats.
+        </p>
+    </div>
+
+    <div class="about-features anim-up d1">
+        <div class="af-card">
+            <div class="af-icon af-blue"><span class="material-icons-round">travel_explore</span></div>
+            <h3>URL Inspector</h3>
+            <p>Analyzes URL structure using 13 features and a Random Forest classifier to detect phishing.</p>
+        </div>
+        <div class="af-card">
+            <div class="af-icon af-orange"><span class="material-icons-round">mail_lock</span></div>
+            <h3>Mail Analyzer</h3>
+            <p>Scans email content using TF-IDF vectorization + Logistic Regression to flag spam and phishing.</p>
+        </div>
+        <div class="af-card">
+            <div class="af-icon af-purple"><span class="material-icons-round">insights</span></div>
+            <h3>Threat Insights</h3>
+            <p>Tracks keyword frequency, risk distribution, and scan trends for situational awareness.</p>
+        </div>
+        <div class="af-card">
+            <div class="af-icon af-green"><span class="material-icons-round">description</span></div>
+            <h3>PDF Reports</h3>
+            <p>Generates professional PDF analysis reports with full breakdown using ReportLab.</p>
+        </div>
+        <div class="af-card">
+            <div class="af-icon af-red"><span class="material-icons-round">history</span></div>
+            <h3>Activity Vault</h3>
+            <p>Maintains a log of all scans with timestamps, status, and scores for auditing.</p>
+        </div>
+        <div class="af-card">
+            <div class="af-icon af-teal"><span class="material-icons-round">tune</span></div>
+            <h3>System Config</h3>
+            <p>Theme switching, data management, and system customization options.</p>
+        </div>
+    </div>
+
+    <div class="card anim-up d2">
+        <h2 class="card-head"><span class="material-icons-round">school</span> Technology Stack</h2>
+        <div class="tech-grid">
+            <div class="tech-item"><strong>Backend</strong><span>Flask (Python)</span></div>
+            <div class="tech-item"><strong>URL Model</strong><span>Random Forest Classifier</span></div>
+            <div class="tech-item"><strong>Mail Model</strong><span>TF-IDF + Logistic Regression</span></div>
+            <div class="tech-item"><strong>Reports</strong><span>ReportLab PDF</span></div>
+            <div class="tech-item"><strong>Frontend</strong><span>Vanilla HTML/CSS/JS</span></div>
+            <div class="tech-item"><strong>Icons</strong><span>Material Icons Round</span></div>
+        </div>
+    </div>
+
+    <div class="card anim-up d2">
+        <h2 class="card-head"><span class="material-icons-round">tune</span> Risk Scoring</h2>
+        <div class="score-tiers">
+            <div class="tier t-safe"><span class="t-range">0 – 30</span><span class="t-label">Safe</span></div>
+            <div class="tier t-warn"><span class="t-range">31 – 60</span><span class="t-label">Suspicious</span></div>
+            <div class="tier t-danger"><span class="t-range">61 – 100</span><span class="t-label">Dangerous</span></div>
+        </div>
+        <p class="tier-note">Score blends 60% rule-based heuristics + 40% ML phishing probability.</p>
+    </div>
+
+    <div class="about-cta anim-up d3">
+        <a href="/" class="action-btn ab-primary"><span class="material-icons-round">rocket_launch</span> Get Started</a>
+    </div>
+</div>
+{% endblock %}

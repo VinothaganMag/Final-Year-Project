@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}Threat Insights{% endblock %}
+{% block content %}
+<div class="page-container">
+    <div class="page-header anim-up">
+        <h1><span class="material-icons-round">insights</span> Threat Insights</h1>
+        <p>Keyword frequency, risk distribution, and scan analytics</p>
+    </div>
+
+    <!-- Overview cards -->
+    <div class="insight-cards anim-up d1">
+        <div class="insight-card ic-blue">
+            <span class="material-icons-round">radar</span>
+            <div><span class="ic-num">{{ total }}</span><span class="ic-label">Total Scans</span></div>
+        </div>
+        <div class="insight-card ic-green">
+            <span class="material-icons-round">check_circle</span>
+            <div><span class="ic-num">{{ risk_dist.Safe }}</span><span class="ic-label">Safe URLs</span></div>
+        </div>
+        <div class="insight-card ic-yellow">
+            <span class="material-icons-round">warning</span>
+            <div><span class="ic-num">{{ risk_dist.Suspicious }}</span><span class="ic-label">Suspicious</span></div>
+        </div>
+        <div class="insight-card ic-red">
+            <span class="material-icons-round">dangerous</span>
+            <div><span class="ic-num">{{ risk_dist.Dangerous }}</span><span class="ic-label">Dangerous</span></div>
+        </div>
+    </div>
+
+    <div class="two-col anim-up d2">
+        <!-- Risk Distribution -->
+        <div class="card">
+            <h2 class="card-head"><span class="material-icons-round">donut_large</span> URL Risk Distribution</h2>
+            <div class="dist-bars">
+                {% set total_risk = risk_dist.Safe + risk_dist.Suspicious + risk_dist.Dangerous %}
+                <div class="dist-row">
+                    <span class="dist-label">Safe</span>
+                    <div class="dist-track">
+                        <div class="dist-fill df-safe" style="width: {% if total_risk > 0 %}{{ (risk_dist.Safe / total_risk * 100)|round }}{% else %}0{% endif %}%;"></div>
+                    </div>
+                    <span class="dist-count">{{ risk_dist.Safe }}</span>
+                </div>
+                <div class="dist-row">
+                    <span class="dist-label">Suspicious</span>
+                    <div class="dist-track">
+                        <div class="dist-fill df-warn" style="width: {% if total_risk > 0 %}{{ (risk_dist.Suspicious / total_risk * 100)|round }}{% else %}0{% endif %}%;"></div>
+                    </div>
+                    <span class="dist-count">{{ risk_dist.Suspicious }}</span>
+                </div>
+                <div class="dist-row">
+                    <span class="dist-label">Dangerous</span>
+                    <div class="dist-track">
+                        <div class="dist-fill df-danger" style="width: {% if total_risk > 0 %}{{ (risk_dist.Dangerous / total_risk * 100)|round }}{% else %}0{% endif %}%;"></div>
+                    </div>
+                    <span class="dist-count">{{ risk_dist.Dangerous }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mail Distribution -->
+        <div class="card">
+            <h2 class="card-head"><span class="material-icons-round">mail</span> Email Scan Distribution</h2>
+            <div class="dist-bars">
+                {% set total_mail = mail_dist.Legitimate + mail_dist['Spam / Phishing'] %}
+                <div class="dist-row">
+                    <span class="dist-label">Legitimate</span>
+                    <div class="dist-track">
+                        <div class="dist-fill df-safe" style="width: {% if total_mail > 0 %}{{ (mail_dist.Legitimate / total_mail * 100)|round }}{% else %}0{% endif %}%;"></div>
+                    </div>
+                    <span class="dist-count">{{ mail_dist.Legitimate }}</span>
+                </div>
+                <div class="dist-row">
+                    <span class="dist-label">Spam / Phishing</span>
+                    <div class="dist-track">
+                        <div class="dist-fill df-danger" style="width: {% if total_mail > 0 %}{{ (mail_dist['Spam / Phishing'] / total_mail * 100)|round }}{% else %}0{% endif %}%;"></div>
+                    </div>
+                    <span class="dist-count">{{ mail_dist['Spam / Phishing'] }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Keyword Frequency -->
+    <div class="card anim-up d3">
+        <h2 class="card-head"><span class="material-icons-round">label</span> Suspicious Keyword Frequency</h2>
+        {% if kw_freq %}
+        <div class="kw-grid">
+            {% for kw, count in kw_freq|dictsort(by='value', reverse=true) %}
+            <div class="kw-chip">
+                <span class="kw-word">{{ kw }}</span>
+                <span class="kw-count">{{ count }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <span class="material-icons-round">search_off</span>
+            <p>No keyword data yet. Scan some URLs to see keyword frequency.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

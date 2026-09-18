@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}URL Inspector{% endblock %}
+{% block content %}
+<div class="page-container centered-page">
+    <div class="scanner-card anim-up">
+        <div class="scanner-header">
+            <span class="material-icons-round scanner-icon si-blue-icon">travel_explore</span>
+            <h1>URL Inspector</h1>
+            <p>Enter any URL to analyze its phishing risk using Random Forest ML model</p>
+        </div>
+        <form action="/url/result" method="GET" class="scanner-form" id="urlForm">
+            <div class="input-row">
+                <span class="material-icons-round input-pre-icon">link</span>
+                <input type="text" name="url" id="urlInput" placeholder="e.g. https://suspicious-site.com/login"
+                       autocomplete="off" required>
+                <button type="submit" class="submit-btn btn-blue">
+                    <span class="material-icons-round">search</span>
+                    <span>Analyze</span>
+                </button>
+            </div>
+            {% if error %}
+            <p class="form-error">{{ error }}</p>
+            {% endif %}
+        </form>
+        <div class="scanner-features">
+            <div class="sf-item"><span class="material-icons-round">speed</span> Risk Score (0-100)</div>
+            <div class="sf-item"><span class="material-icons-round">psychology</span> Random Forest ML</div>
+            <div class="sf-item"><span class="material-icons-round">visibility</span> Explainable</div>
+        </div>
+    </div>
+</div>
+{% endblock %}

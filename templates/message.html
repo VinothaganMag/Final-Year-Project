@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Phish Detector - Message Analyzer</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">AI Phish Detector</div>
+            <nav class="menu">
+                <a href="dashboard.html" class="menu-item">Dashboard</a>
+                <a href="url.html" class="menu-item">URL Scanner</a>
+                <a href="message.html" class="menu-item active">Message Analyzer</a>
+                <a href="analytics.html" class="menu-item">Analytics</a>
+                <a href="history.html" class="menu-item">History</a>
+                <a href="about.html" class="menu-item">About</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <h1>Message Analyzer</h1>
+            </header>
+
+            <section class="message-analyzer">
+                <h2>Enter Message</h2>
+                <textarea id="message-input" placeholder="Enter message here..."></textarea>
+                <button id="analyze-message-button">Analyze Message</button>
+
+                <div id="message-result" class="result-card hidden">
+                    <h2>Result</h2>
+                    <p id="message-status">Status: <span></span></p>
+                    <p id="message-confidence">Confidence: <span></span></p>
+                </div>
+
+                <div id="message-analysis" class="analysis-panel hidden">
+                    <h2>Message Analysis</h2>
+                    <p>Suspicious Words: <span id="message-words"></span></p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="../static/script.js"></script>
+</body>
+</html>

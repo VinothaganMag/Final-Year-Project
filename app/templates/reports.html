@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Reports{% endblock %}
+{% block content %}
+<div class="page-container">
+    <div class="page-header anim-up">
+        <h1><span class="material-icons-round">description</span> Reports</h1>
+        <p>View and download previously generated PDF analysis reports</p>
+    </div>
+
+    {% if reports %}
+    <div class="card anim-up d1">
+        <div class="reports-table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Report Name</th>
+                        <th>Size</th>
+                        <th>Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in reports %}
+                    <tr>
+                        <td>
+                            <span class="material-icons-round" style="color:var(--danger);vertical-align:middle;margin-right:6px;">picture_as_pdf</span>
+                            {{ r.name }}
+                        </td>
+                        <td>{{ r.size }}</td>
+                        <td>{{ r.date }}</td>
+                        <td>
+                            <a href="/download-report/{{ r.name }}" class="dl-btn">
+                                <span class="material-icons-round">download</span> Download
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+    <div class="card anim-up d1">
+        <div class="empty-state">
+            <span class="material-icons-round">folder_open</span>
+            <p>No reports generated yet. Analyze a URL or email, then click "Download Report" to generate one.</p>
+            <div class="es-actions">
+                <a href="/url" class="action-btn ab-primary"><span class="material-icons-round">travel_explore</span> Scan URL</a>
+                <a href="/mail" class="action-btn ab-secondary"><span class="material-icons-round">mail_lock</span> Scan Email</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

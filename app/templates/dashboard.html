@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Web3 Phishing Detector</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+  <script src="/static/script.js" defer></script>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">🛡️</div>
+      <span>PhishGuard</span>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-label">Main</div>
+      <a href="/"          class="nav-link"><span class="icon">🏠</span> Dashboard</a>
+      <a href="/url"       class="nav-link"><span class="icon">🔗</span> URL Scanner</a>
+      <a href="/message"   class="nav-link"><span class="icon">💬</span> Message Analyzer</a>
+      <div class="nav-label">Insights</div>
+      <a href="/analytics" class="nav-link"><span class="icon">📊</span> Analytics</a>
+      <a href="/history"   class="nav-link"><span class="icon">🕓</span> History</a>
+      <div class="nav-label">Info</div>
+      <a href="/about"     class="nav-link"><span class="icon">ℹ️</span> About</a>
+    </nav>
+    <div class="sidebar-footer">
+      Web3 Phishing Detector<br/>
+      <span style="opacity:0.5">v2.0 · 2025</span>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="page-header">
+      <h1>Dashboard</h1>
+      <p>Overview of your phishing detection activity</p>
+    </div>
+
+    <!-- STAT CARDS -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon blue">🔍</div>
+        <div class="stat-info">
+          <div class="label">Total Scans</div>
+          <div class="value" id="statTotal">0</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon red">🚨</div>
+        <div class="stat-info">
+          <div class="label">Phishing Detected</div>
+          <div class="value" id="statPhishing">0</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon green">✅</div>
+        <div class="stat-info">
+          <div class="label">Safe URLs</div>
+          <div class="value" id="statSafe">0</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon yellow">⚡</div>
+        <div class="stat-info">
+          <div class="label">Models Active</div>
+          <div class="value">2</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK SCAN -->
+    <div class="quick-scan">
+      <h2>⚡ Quick Scan</h2>
+      <p>Drop a URL below for an instant phishing check</p>
+      <div class="input-group">
+        <input type="text" id="dashInput" placeholder="https://example.com/login" autocomplete="off" />
+        <button class="btn btn-primary" id="dashBtn">🔍 Scan</button>
+      </div>
+      <div id="dashResult"></div>
+    </div>
+
+    <!-- RECENT ACTIVITY -->
+    <div class="card">
+      <div class="section-title">Recent Activity</div>
+      <div id="recentActivity">
+        <script>
+          (function(){
+            const h = JSON.parse(localStorage.getItem('scanHistory') || '[]').slice(0,6);
+            const el = document.getElementById('recentActivity');
+            if (!h.length) {
+              el.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>No scans yet. Try the quick scan above!</p></div>';
+              return;
+            }
+            el.innerHTML = h.map(item => `
+              <div class="activity-item">
+                <div class="activity-dot" style="background:${item.result==='Phishing'?'#ef4444':'#22c55e'}"></div>
+                <div style="flex:1;min-width:0">
+                  <div style="font-size:0.85rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${item.input}</div>
+                  <div style="font-size:0.72rem;color:var(--muted)">${item.time}</div>
+                </div>
+                <span class="badge ${item.result==='Phishing'?'badge-danger':'badge-success'}">${item.result}</span>
+                <span style="font-size:0.78rem;color:var(--muted);margin-left:8px">${item.confidence}%</span>
+              </div>`).join('');
+          })();
+        </script>
+      </div>
+    </div>
+
+    <!-- INSIGHTS -->
+    <div class="card">
+      <div class="section-title">Insights</div>
+      <div class="charts">
+        <canvas id="scan-chart"></canvas>
+        <canvas id="risk-chart"></canvas>
+      </div>
+    </div>
+  </main>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

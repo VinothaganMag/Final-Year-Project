@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Detailed feature analysis — See the breakdown of URL features used for risk scoring.">
+    <title>Feature Analysis — Risk Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="/" class="nav-brand">
+            <span class="material-icons-round brand-icon">shield</span>
+            <span>Risk Analyzer</span>
+        </a>
+        <div class="nav-links">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/about" class="nav-link">About</a>
+        </div>
+    </nav>
+
+    <main class="analysis-container">
+        <!-- Header -->
+        <div class="analysis-header animate-fade-in">
+            <h1 class="page-title">Feature Analysis</h1>
+            <div class="url-banner small-banner">
+                <span class="material-icons-round">link</span>
+                <span class="url-text" title="{{ url }}">{{ url }}</span>
+            </div>
+        </div>
+
+        <!-- Summary Row -->
+        <div class="summary-row animate-fade-in-delay-1">
+            <div class="summary-card">
+                <div class="summary-icon
+                    {% if data.status == 'Safe' %} bg-safe
+                    {% elif data.status == 'Suspicious' %} bg-suspicious
+                    {% else %} bg-dangerous
+                    {% endif %}">
+                    <span class="material-icons-round">
+                        {% if data.status == 'Safe' %}check_circle
+                        {% elif data.status == 'Suspicious' %}warning
+                        {% else %}dangerous
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="summary-text">
+                    <span class="summary-label">Status</span>
+                    <span class="summary-value">{{ data.status }}</span>
+                </div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-icon bg-blue">
+                    <span class="material-icons-round">speed</span>
+                </div>
+                <div class="summary-text">
+                    <span class="summary-label">Risk Score</span>
+                    <span class="summary-value">{{ data.risk_score }}/100</span>
+                </div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-icon bg-purple">
+                    <span class="material-icons-round">psychology</span>
+                </div>
+                <div class="summary-text">
+                    <span class="summary-label">ML Prediction</span>
+                    <span class="summary-value">{{ data.ml_prediction }}</span>
+                </div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-icon bg-orange">
+                    <span class="material-icons-round">percent</span>
+                </div>
+                <div class="summary-text">
+                    <span class="summary-label">Confidence</span>
+                    <span class="summary-value">{{ data.ml_confidence }}%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature Grid -->
+        <h2 class="section-title animate-fade-in-delay-2">
+            <span class="material-icons-round">table_chart</span>
+            Feature Breakdown
+        </h2>
+
+        <div class="feature-grid animate-fade-in-delay-2">
+            {% for feat in data.features %}
+            <div class="feature-card">
+                <div class="feature-header">
+                    <span class="feature-name">{{ feat.name }}</span>
+                    <span class="feature-value">{{ feat.value }}</span>
+                </div>
+                <div class="feature-bar-track">
+                    <div class="feature-bar-fill" data-importance="{{ feat.importance }}" style="width: 0%;">
+                    </div>
+                </div>
+                <span class="feature-importance">Importance: {{ feat.importance }}%</span>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Back Actions -->
+        <div class="action-row animate-fade-in-delay-3">
+            <a href="/result?url={{ url }}" class="action-btn action-primary">
+                <span class="material-icons-round">arrow_back</span>
+                <span>Back to Results</span>
+            </a>
+            <a href="/" class="action-btn action-secondary">
+                <span class="material-icons-round">replay</span>
+                <span>Scan Another URL</span>
+            </a>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

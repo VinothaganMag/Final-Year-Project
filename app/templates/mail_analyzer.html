@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Mail Analyzer{% endblock %}
+{% block content %}
+<div class="page-container centered-page">
+    <div class="scanner-card anim-up">
+        <div class="scanner-header">
+            <span class="material-icons-round scanner-icon si-orange-icon">mail_lock</span>
+            <h1>Mail Analyzer</h1>
+            <p>Paste any email or message to analyze it for spam and phishing patterns</p>
+        </div>
+        <form action="/mail/result" method="GET" class="scanner-form" id="mailForm">
+            <div class="textarea-row">
+                <textarea name="message" id="mailInput" rows="6"
+                    placeholder="Paste the email body or message content here..."
+                    required></textarea>
+            </div>
+            <button type="submit" class="submit-btn btn-orange full-width">
+                <span class="material-icons-round">shield</span>
+                <span>Scan Message</span>
+            </button>
+            {% if error %}
+            <p class="form-error">{{ error }}</p>
+            {% endif %}
+        </form>
+        <div class="scanner-features">
+            <div class="sf-item"><span class="material-icons-round">text_fields</span> TF-IDF Analysis</div>
+            <div class="sf-item"><span class="material-icons-round">model_training</span> Logistic Regression</div>
+            <div class="sf-item"><span class="material-icons-round">highlight</span> Word Flagging</div>
+        </div>
+    </div>
+</div>
+{% endblock %}

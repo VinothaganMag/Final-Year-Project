@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}URL Result{% endblock %}
+{% block content %}
+<div class="page-container">
+    <!-- URL Banner -->
+    <div class="url-strip anim-up">
+        <span class="material-icons-round">link</span>
+        <span class="url-mono">{{ url }}</span>
+    </div>
+
+    <!-- Gauge + Status -->
+    <div class="result-hero anim-up d1">
+        <div class="gauge-box">
+            <svg class="gauge-svg" viewBox="0 0 200 200">
+                <circle class="gauge-track" cx="100" cy="100" r="85"/>
+                <circle class="gauge-arc
+                    {% if data.status == 'Safe' %}arc-safe
+                    {% elif data.status == 'Suspicious' %}arc-warn
+                    {% else %}arc-danger{% endif %}"
+                    cx="100" cy="100" r="85"
+                    stroke-dasharray="534"
+                    stroke-dashoffset="{{ 534 - (534 * data.risk_score / 100) }}"
+                    data-target="{{ 534 - (534 * data.risk_score / 100) }}"
+                />
+            </svg>
+            <div class="gauge-inner">
+                <span class="gauge-num" id="gaugeNum" data-target="{{ data.risk_score }}">0</span>
+                <span class="gauge-sub">Risk Score</span>
+            </div>
+        </div>
+        <div class="status-badge
+            {% if data.status == 'Safe' %}sb-safe
+            {% elif data.status == 'Suspicious' %}sb-warn
+            {% else %}sb-danger{% endif %}">
+            <span class="material-icons-round">
+                {% if data.status == 'Safe' %}check_circle
+                {% elif data.status == 'Suspicious' %}warning
+                {% else %}dangerous{% endif %}
+            </span>
+            {{ data.status }}
+        </div>
+    </div>
+
+    <!-- ML Stats -->
+    <div class="ml-strip anim-up d1">
+        <div class="ml-chip">
+            <span class="ml-k">ML Prediction</span>
+            <span class="ml-v">{{ data.ml_prediction }}</span>
+        </div>
+        <div class="ml-chip">
+            <span class="ml-k">Confidence</span>
+            <span class="ml-v">{{ data.ml_confidence }}%</span>
+        </div>
+        <div class="ml-chip">
+            <span class="ml-k">Phishing Prob.</span>
+            <span class="ml-v">{{ data.phishing_probability }}%</span>
+        </div>
+    </div>
+
+    <!-- Reasons -->
+    <div class="card anim-up d2">
+        <h2 class="card-head"><span class="material-icons-round">info</span> Why This Score?</h2>
+        <ul class="reason-list">
+            {% for reason in data.reasons %}
+            <li class="reason-row">
+                <span class="material-icons-round reason-dot
+                    {% if data.status == 'Safe' %}dot-safe
+                    {% elif data.status == 'Suspicious' %}dot-warn
+                    {% else %}dot-danger{% endif %}">
+                    {% if data.status == 'Safe' %}check{% elif data.status == 'Suspicious' %}priority_high{% else %}close{% endif %}
+                </span>
+                <span>{{ reason }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Feature Breakdown -->
+    <div class="card anim-up d2">
+        <h2 class="card-head"><span class="material-icons-round">table_chart</span> Feature Breakdown</h2>
+        <div class="feat-grid">
+            {% for feat in data.features %}
+            <div class="feat-chip">
+                <div class="feat-top">
+                    <span class="feat-name">{{ feat.name }}</span>
+                    <span class="feat-val">{{ feat.value }}</span>
+                </div>
+                <div class="feat-bar-bg">
+                    <div class="feat-bar-fill" data-importance="{{ feat.importance }}"></div>
+                </div>
+                <span class="feat-imp">{{ feat.importance }}% importance</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions-row anim-up d3">
+        <button class="action-btn ab-primary" onclick="generateReport('url')">
+            <span class="material-icons-round">picture_as_pdf</span> Download Report
+        </button>
+        <a href="/url" class="action-btn ab-secondary">
+            <span class="material-icons-round">replay</span> Scan Another
+        </a>
+    </div>
+</div>
+
+<!-- Hidden data for report generation -->
+<script id="resultData" type="application/json">{{ data | tojson }}</script>
+<script id="resultUrl" type="text/plain">{{ url }}</script>
+{% endblock %}
