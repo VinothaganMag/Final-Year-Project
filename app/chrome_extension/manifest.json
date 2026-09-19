@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "CRIS Phishing Link Interceptor",
+  "version": "1.0.0",
+  "description": "Intercepts links in Chrome and sends them to the CRIS phishing detection system.",
+  "permissions": [],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_start"
+    }
+  ]
+}

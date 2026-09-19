@@ -7,7 +7,7 @@ delegates to the existing ``predict_url`` model code, and renders an interstitia
 from urllib.parse import urlparse
 
 from flask import Blueprint, jsonify, render_template, request
-from model import predict_url
+from .model import predict_url
 
 MAX_URL_LENGTH = 2048
 ALLOWED_SCHEMES = ("http", "https")
@@ -39,7 +39,7 @@ def intercept():
 
     data = predict_url(target)
 
-    from app import add_activity
+    from .app import add_activity
 
     add_activity("URL", target, data)
 

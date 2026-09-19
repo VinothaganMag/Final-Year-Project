@@ -2,9 +2,9 @@ import json
 import os
 from datetime import datetime
 from flask import Flask, render_template, request, jsonify, send_from_directory, session
-from intercept import intercept_bp
-from model import predict_url, predict_mail, SUSPICIOUS_KEYWORDS
-from report_generator import generate_url_report, generate_mail_report, REPORTS_DIR
+from .intercept import intercept_bp
+from .model import predict_url, predict_mail, SUSPICIOUS_KEYWORDS
+from .report_generator import generate_url_report, generate_mail_report, REPORTS_DIR
 
 app = Flask(__name__)
 app.secret_key = 'cyberrisk_intel_2026_secret'
