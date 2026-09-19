@@ -13,6 +13,11 @@
       "matches": ["http://127.0.0.1:5000/intercept*"],
       "js": ["bridge.js"],
       "run_at": "document_start"
+    },
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["click_tracker.js"],
+      "run_at": "document_start"
     }
   ],
   "options_page": "options.html",

@@ -18,6 +18,34 @@
         // ─────────────────────────────────────────
         if (leaveBtn) {
             leaveBtn.addEventListener('click', () => {
+                const source = leaveBtn.dataset.source;
+                if (source === 'desktop') {
+                    const callerHwnd = leaveBtn.dataset.callerHwnd;
+                    const closeAndFallback = () => {
+                        window.close();
+                        setTimeout(() => {
+                            if (!window.closed) {
+                                if (window.history.length > 1) {
+                                    window.history.back();
+                                } else {
+                                    window.location.assign('/');
+                                }
+                            }
+                        }, 300);
+                    };
+
+                    if (callerHwnd && callerHwnd !== '0') {
+                        fetch('/intercept/leave', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ caller_hwnd: parseInt(callerHwnd, 10) })
+                        }).finally(closeAndFallback);
+                    } else {
+                        closeAndFallback();
+                    }
+                    return;
+                }
+
                 if (window.history.length > 1) {
                     window.history.back();
                 } else {

@@ -168,3 +168,4 @@ ml_dev/model_outputs/*
 *.pkl
 
 app/static/reports/*.pdf
+cris_config.json

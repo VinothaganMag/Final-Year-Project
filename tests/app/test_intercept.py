@@ -3,12 +3,12 @@ import sys
 
 import pytest
 
-APP_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "app")
-sys.path.insert(0, os.path.abspath(APP_DIR))
-
-from intercept import validate_target  # noqa: E402
+PROJECT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if PROJECT_DIR not in sys.path:
+    sys.path.insert(0, PROJECT_DIR)
 
 from app import ACTIVITY_LOG, app  # type: ignore[attr-defined] # noqa: E402
+from app.intercept import validate_target  # noqa: E402
 
 
 @pytest.fixture()
