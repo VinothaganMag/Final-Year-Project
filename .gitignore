@@ -166,3 +166,5 @@ ml_dev/model_outputs/*
 
 *.csv
 *.pkl
+
+app/static/reports/*.pdf
