@@ -10,20 +10,23 @@ Run from the backend/ directory:
 
 import os
 import re
+
 import joblib
 import numpy as np
 import pandas as pd
-from scipy.sparse import hstack, csr_matrix
-
+from scipy.sparse import csr_matrix, hstack
+from sklearn.ensemble import RandomForestClassifier, VotingClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import RandomForestClassifier, VotingClassifier
-from sklearn.svm import SVC
-from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.metrics import (
-    accuracy_score, precision_score, recall_score,
-    f1_score, classification_report
+    accuracy_score,
+    classification_report,
+    f1_score,
+    precision_score,
+    recall_score,
 )
+from sklearn.model_selection import cross_val_score, train_test_split
+from sklearn.svm import SVC
 
 # ─────────────────────────────────────────────
 # DATASET  (200 balanced samples)
@@ -246,9 +249,26 @@ print(f"Dataset: {len(df)} samples  |  Safe={sum(df.label==0)}  Phishing={sum(df
 # ─────────────────────────────────────────────
 # FEATURE ENGINEERING
 # ─────────────────────────────────────────────
-SUSPICIOUS_WORDS = ["login", "verify", "bank", "free", "secure", "update",
-                    "account", "confirm", "suspend", "unlock", "claim", "reward",
-                    "urgent", "alert", "password", "credential", "wallet", "crypto"]
+SUSPICIOUS_WORDS = [
+    "login",
+    "verify",
+    "bank",
+    "free",
+    "secure",
+    "update",
+    "account",
+    "confirm",
+    "suspend",
+    "unlock",
+    "claim",
+    "reward",
+    "urgent",
+    "alert",
+    "password",
+    "credential",
+    "wallet",
+    "crypto",
+]
 
 IP_PATTERN = re.compile(r"(\d{1,3}\.){3}\d{1,3}")
 
@@ -256,24 +276,43 @@ IP_PATTERN = re.compile(r"(\d{1,3}\.){3}\d{1,3}")
 def extract_features(url: str) -> list:
     url_lower = url.lower()
     return [
-        len(url),                                                   # 1. URL length
-        url.count("."),                                             # 2. number of dots
-        url.count("-"),                                             # 3. number of hyphens
-        url.count("_"),                                             # 4. number of underscores
-        sum(c.isdigit() for c in url),                             # 5. digit count
-        1 if url_lower.startswith("https") else 0,                 # 6. https present
-        1 if IP_PATTERN.search(url) else 0,                        # 7. contains IP address
-        sum(1 for w in SUSPICIOUS_WORDS if w in url_lower),        # 8. suspicious word count
-        url.count("/"),                                             # 9. slash count
-        url.count("?"),                                             # 10. query string present
-        url.count("="),                                             # 11. param count
-        url.count("@"),                                             # 12. @ symbol (rare, phishing)
-        len(url.split("//")[-1].split("/")[0]),                    # 13. hostname length
-        url.count("%"),                                             # 14. URL-encoded chars
-        1 if any(url_lower.endswith(tld) for tld
-                 in [".tk", ".ml", ".cf", ".gq", ".ru", ".xyz",
-                     ".online", ".site", ".club", ".info", ".pro",
-                     ".live", ".store", ".buzz"]) else 0,          # 15. suspicious TLD
+        len(url),  # 1. URL length
+        url.count("."),  # 2. number of dots
+        url.count("-"),  # 3. number of hyphens
+        url.count("_"),  # 4. number of underscores
+        sum(c.isdigit() for c in url),  # 5. digit count
+        1 if url_lower.startswith("https") else 0,  # 6. https present
+        1 if IP_PATTERN.search(url) else 0,  # 7. contains IP address
+        sum(1 for w in SUSPICIOUS_WORDS if w in url_lower),  # 8. suspicious word count
+        url.count("/"),  # 9. slash count
+        url.count("?"),  # 10. query string present
+        url.count("="),  # 11. param count
+        url.count("@"),  # 12. @ symbol (rare, phishing)
+        len(url.split("//")[-1].split("/")[0]),  # 13. hostname length
+        url.count("%"),  # 14. URL-encoded chars
+        (
+            1
+            if any(
+                url_lower.endswith(tld)
+                for tld in [
+                    ".tk",
+                    ".ml",
+                    ".cf",
+                    ".gq",
+                    ".ru",
+                    ".xyz",
+                    ".online",
+                    ".site",
+                    ".club",
+                    ".info",
+                    ".pro",
+                    ".live",
+                    ".store",
+                    ".buzz",
+                ]
+            )
+            else 0
+        ),  # 15. suspicious TLD
     ]
 
 
@@ -281,8 +320,9 @@ def extract_features(url: str) -> list:
 X_struct = np.array([extract_features(u) for u in df["url"]], dtype=float)
 
 # TF-IDF on character n-grams (3-5) — excellent for URL phishing
-vectorizer = TfidfVectorizer(analyzer="char_wb", ngram_range=(3, 5),
-                             max_features=3000, sublinear_tf=True)
+vectorizer = TfidfVectorizer(
+    analyzer="char_wb", ngram_range=(3, 5), max_features=3000, sublinear_tf=True
+)
 X_tfidf = vectorizer.fit_transform(df["url"])
 
 # Hybrid: TF-IDF + structural
@@ -303,8 +343,8 @@ X_train, X_test, y_train, y_test = train_test_split(
 # ─────────────────────────────────────────────
 # BASE MODELS
 # ─────────────────────────────────────────────
-lr  = LogisticRegression(max_iter=1000, C=1.0, random_state=42)
-rf  = RandomForestClassifier(n_estimators=200, max_depth=12, random_state=42)
+lr = LogisticRegression(max_iter=1000, C=1.0, random_state=42)
+rf = RandomForestClassifier(n_estimators=200, max_depth=12, random_state=42)
 svm = SVC(kernel="rbf", probability=True, C=1.0, random_state=42)
 
 
@@ -328,11 +368,11 @@ ensemble_hard = VotingClassifier(
 print("\n--- Training Soft Voting Ensemble ---")
 ensemble_soft.fit(X_train, y_train)
 y_pred_soft = ensemble_soft.predict(X_test)
-soft_acc  = accuracy_score(y_test, y_pred_soft)
+soft_acc = accuracy_score(y_test, y_pred_soft)
 soft_prec = precision_score(y_test, y_pred_soft)
-soft_rec  = recall_score(y_test, y_pred_soft)
-soft_f1   = f1_score(y_test, y_pred_soft)
-cv_soft   = cross_val_score(ensemble_soft, X, y, cv=5).mean()
+soft_rec = recall_score(y_test, y_pred_soft)
+soft_f1 = f1_score(y_test, y_pred_soft)
+cv_soft = cross_val_score(ensemble_soft, X, y, cv=5).mean()
 
 print(f"  Accuracy : {soft_acc*100:.2f}%")
 print(f"  Precision: {soft_prec*100:.2f}%")
@@ -343,11 +383,11 @@ print(f"  CV Score : {cv_soft*100:.2f}%")
 print("\n--- Training Hard Voting Ensemble ---")
 ensemble_hard.fit(X_train, y_train)
 y_pred_hard = ensemble_hard.predict(X_test)
-hard_acc  = accuracy_score(y_test, y_pred_hard)
+hard_acc = accuracy_score(y_test, y_pred_hard)
 hard_prec = precision_score(y_test, y_pred_hard)
-hard_rec  = recall_score(y_test, y_pred_hard)
-hard_f1   = f1_score(y_test, y_pred_hard)
-cv_hard   = cross_val_score(ensemble_hard, X, y, cv=5).mean()
+hard_rec = recall_score(y_test, y_pred_hard)
+hard_f1 = f1_score(y_test, y_pred_hard)
+cv_hard = cross_val_score(ensemble_hard, X, y, cv=5).mean()
 
 print(f"  Accuracy : {hard_acc*100:.2f}%")
 print(f"  Precision: {hard_prec*100:.2f}%")

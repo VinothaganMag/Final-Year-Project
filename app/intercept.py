@@ -7,6 +7,7 @@ delegates to the existing ``predict_url`` model code, and renders an interstitia
 from urllib.parse import urlparse
 
 from flask import Blueprint, jsonify, render_template, request
+
 from .model import predict_url
 
 MAX_URL_LENGTH = 2048

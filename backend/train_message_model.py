@@ -9,11 +9,12 @@ Run from the backend/ directory:
 """
 
 import os
+
 import joblib
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.metrics import accuracy_score, classification_report
+from sklearn.model_selection import cross_val_score, train_test_split
 
 # ─────────────────────────────────────────────
 # DATASET  (120 balanced samples)
@@ -146,7 +147,7 @@ SAFE_MESSAGES = [
     "Please fill in the timesheet by 5pm today.",
 ]
 
-texts  = PHISHING_MESSAGES + SAFE_MESSAGES
+texts = PHISHING_MESSAGES + SAFE_MESSAGES
 labels = [1] * len(PHISHING_MESSAGES) + [0] * len(SAFE_MESSAGES)
 
 print(f"Dataset: {len(texts)} samples  |  Safe={labels.count(0)}  Phishing={labels.count(1)}")
@@ -154,8 +155,9 @@ print(f"Dataset: {len(texts)} samples  |  Safe={labels.count(0)}  Phishing={labe
 # ─────────────────────────────────────────────
 # VECTORIZE
 # ─────────────────────────────────────────────
-vectorizer = TfidfVectorizer(ngram_range=(1, 2), max_features=5000,
-                             sublinear_tf=True, stop_words="english")
+vectorizer = TfidfVectorizer(
+    ngram_range=(1, 2), max_features=5000, sublinear_tf=True, stop_words="english"
+)
 X = vectorizer.fit_transform(texts)
 
 # ─────────────────────────────────────────────
@@ -169,8 +171,8 @@ model = LogisticRegression(max_iter=1000, C=1.0, random_state=42)
 model.fit(X_train, y_train)
 
 y_pred = model.predict(X_test)
-acc  = accuracy_score(y_test, y_pred)
-cv   = cross_val_score(model, X, labels, cv=5).mean()
+acc = accuracy_score(y_test, y_pred)
+cv = cross_val_score(model, X, labels, cv=5).mean()
 
 print(f"\n  Accuracy : {acc*100:.2f}%")
 print(f"  CV Score : {cv*100:.2f}%")
